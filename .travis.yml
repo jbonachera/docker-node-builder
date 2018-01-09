@@ -1,0 +1,12 @@
+sudo: required
+language: c
+services:
+  - docker
+script:
+  - make
+  - docker build -t jbonachera/node-builder:$TRAVIS_COMMIT . ;
+after_success:
+  - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
+  - docker push jbonachera/node-builder:$TRAVIS_COMMIT;
+  - docker tag jbonachera/node-builder:$TRAVIS_COMMIT jbonachera/node-builder:latest
+  - docker push jbonachera/node-builder:latest
